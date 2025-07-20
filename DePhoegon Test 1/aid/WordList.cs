@@ -1,7 +1,7 @@
 ﻿using System;
+namespace DePhoegonHangMan.aid;
 
-public class WordList
-{
+public class WordList {
 	public WordList()
 	{
 	}

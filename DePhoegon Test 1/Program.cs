@@ -1,37 +1,40 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using DePhoegonHangMan.aid;
+
+namespace DePhoegonHangMan;
 class WordGuess {
-    public const int intendedWidth = 50;
-    public const int intendedHeight = 50;
-    public const int hangChances = 6;
-    private static int defaultstyle = 1; // Default style for the hangman drawing
+    private const int intendedWidth = 50;
+    private const int intendedHeight = 50;
+    private const int hangChances = 6;
 
     // Game state variables (static for static methods)
     static char[] guessedChars = [];
-    static int wordListCount = 10;
+    static readonly int wordListCount = 10;
     static string[] wList = [];
-    static char[] alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
+    static readonly char[] alphabet = "abcdefghijklmnopqrstuvwxyz".ToCharArray();
     static char[] answer = [];
     static char[] guessedAnswer = [];
     static int answerLength;
     static int hangCount = 0;
+    static int style = 0;
+    static int lineStyle = 0;
 
     static void Main() {
         SetWindow();
         Console.WriteLine("Guess Word Game!");
-        
+        bool notWon = true;
+
         // Initialize the game
         GameInit();
 
-        DrawBoard(answer, alphabet, 0);
-
-        while (hangCount < hangChances) {
-            // get user input
-            DrawBoard(answer, alphabet, hangCount);
-            // wait for input
+        while (hangCount < hangChances && notWon) { 
+            DrawBoard(answer, guessedChars, guessedAnswer, alphabet, hangCount);
+            Console.Write("Enter a letter to guess: ");
             char input = Console.ReadKey(true).KeyChar;
             input = char.ToLowerInvariant(input);
             if (SetGuessedChars(input)) {
-                if (lettersGuessed(input)) { Console.WriteLine($"Good guess! '{input}' is in the word!"); }
+                if (Array.IndexOf(alphabet, input) == -1) {  }
+                if (LettersGuessed(input)) { Console.WriteLine($"Good guess! '{input}' is in the word!"); }
                 else {
                     hangCount++;
                     Console.WriteLine($"Sorry, '{input}' is not in the word. You have {hangChances - hangCount} chances left.");
@@ -40,9 +43,47 @@ class WordGuess {
                 Console.WriteLine("You already guessed that letter! Try again.");
                 continue; 
             }
+            // Sleep for 2-5 seconds after each guess
+            Random rest = new();
+            int restMS = rest.Next(1000, 3001);
+            Thread.Sleep(restMS);
+            if (answer == guessedAnswer) {
+                notWon = false;
+                Console.Clear();
+                DrawBoard(answer, guessedChars, guessedAnswer, alphabet, hangCount);
+                Console.WriteLine("Congratulations! You've guessed the word!");
+                Console.WriteLine($"The word was: {new string(answer)}");
+            }
         }
+        if (hangCount >= hangChances) {
+            Console.Clear();
+            DrawBoard(answer, guessedChars, guessedAnswer, alphabet, hangCount);
+            Console.WriteLine("Game Over! You've run out of chances.");
+            Console.WriteLine($"The word was: {new string(answer)}");
+            Console.WriteLine("Better luck next time!");
+            Console.Write(LettersGuessed(' ') ? "You guessed the word!" : "You didn't guess the word.");
+            char input = Console.ReadKey(true).KeyChar;
+            SetOrShiftStyles();
+            hangCount = 0;
+        }
+
+        if (!notWon)
+        {
+            Console.WriteLine("Press q key to exit...");
+            char input = Console.ReadKey(true).KeyChar;
+            input = char.ToLowerInvariant(input);
+            if (input == 'q') { return; } // Exit the game if 'q' is pressed
+            SetOrShiftStyles();
+            hangCount = 0; // Reset hang count for next game
+            GameInit(); // Reinitialize the game
+        }
+        Console.WriteLine("Thank you for playing!");
+        Random sleepRand = new();
+        int sleepMs = sleepRand.Next(2000, 5001);
+        Thread.Sleep(sleepMs);
+
     }
-    private static bool lettersGuessed(char guessed) {
+    private static bool LettersGuessed(char guessed) {
         bool found = false;
         for (int i = 0; i < answer.Length; i++) {
             if (char.ToLowerInvariant(answer[i]) == guessed && guessedAnswer[i] == '_') {
@@ -61,12 +102,15 @@ class WordGuess {
         }
         if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux()) { Console.Write($"\x1b[8;{intendedHeight};{intendedWidth}t"); }
     }
+    private static void SetOrShiftStyles() {
+        style = HangmanDrawing.GetStyleInt(style);
+        lineStyle = HangmanDrawing.GetLineStyleInt(lineStyle);
+    }
     static void GameInit() {
         SetWordList();
-        int style = Random.Shared.Next(1, HangmanDrawing.getStyleCount() + 1);
-        int lineStyle = Random.Shared.Next(1, HangmanDrawing.getLineStyles() + 1);
-        HangmanDrawing.setStyle(style);
-        HangmanDrawing.setLineStyle(lineStyle);
+        style = 0; // Reset style to 0 to ensure it gets set correctly
+        lineStyle = 0; // Reset line style to 0 to ensure it gets set correctly
+        SetOrShiftStyles();
         Random random = new();
         string answerString = wList[random.Next(0, wList.Length)];
         answer = answerString.ToCharArray();
@@ -81,13 +125,13 @@ class WordGuess {
         Random rand = new();
         for (int i = 0; i < wordListCount; i++) { wList[i] = WordList.GetRandomWord(rand); }
     }
-    static void DrawBoard(char[] answer, char[] alphabet, int chances) {
+    static void DrawBoard(char[] realAnser, char[] guessedChar, char[] guessedAnswer, char[] alphabet, int chances) {
         Console.Clear();
         HangmanDrawing.DrawStand(chances);
         Console.WriteLine();
         Console.WriteLine();
         Console.WriteLine("Guessed letters:");
-        DrawGuessedAnswer(answer);
+        DrawGuessedAnswer(guessedAnswer);
         Console.WriteLine(HangmanDrawing.getLineBreak());
         Console.WriteLine("Available letters:");
         DrawAvailableLetters(alphabet, guessedChars);

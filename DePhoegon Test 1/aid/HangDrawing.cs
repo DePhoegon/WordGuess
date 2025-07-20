@@ -2,34 +2,60 @@
 using System.CodeDom;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+namespace DePhoegonHangMan.aid;
 
 public class HangmanDrawing {
     private static int styles = 1;
-    private static final int StylesCount = 4;
-    private static final int linestyles = 4;
+    private static readonly int StylesCount = 4;
+    private static readonly int linestyles = 4;
     private static int lineStyle = 1;
     public HangmanDrawing()
 	{
 	}
-    public static int getStyleCount() { return StylesCount; }
-    public static int getLineStyles() { return linestyles; }
-    private static string[] TopGallows = [3];
+    public static void PrimeOnes() {
+        styles = 1;
+        lineStyle = 1;
+    }
+    public static int GetStyleCount() { return StylesCount; }
+    public static int GetStyleInt() { return styles; }
+    public static int GetStyleInt(int compared) {
+        if (compared < 1) { compared = 1; }
+        if (compared > StylesCount) { compared = StylesCount; }
+        if (styles == compared) { SetRandomStyle(); }
+        return styles;
+    }
+    public static int GetLineStyles() { return linestyles; }
+    public static int GetLineStyleInt() { return lineStyle; }
+    public static int GetLineStyleInt(int compared) {
+        if (compared < 1) { compared = 1; }
+        if (compared > linestyles) { compared = linestyles; }
+        if (lineStyle == compared) { SetRandomLineStyle(); }
+        return lineStyle;
+    }
+    private static string[] TopGallows = new string[3];
     private static string BarePost = "";
     private static string BaseGallows = "";
     private static Dictionary<int, string> BodyParts = new();
 
-    public static void setStyle(int style) {
+    public static void SetStyle(int style) {
         if (style < 1) { style = 1; }
         if (style > StylesCount) { style = StylesCount; }
         styles = style; 
-        setStrings();
+        SetStrings();
     }
-    public static void setLineStyle(int line) {
+    public static void SetRandomStyle() {
+        styles = Random.Shared.Next(1, StylesCount + 1);
+        SetStrings();
+    }
+    public static void SetRandomLineStyle() {
+        lineStyle = Random.Shared.Next(1, linestyles + 1);
+    }
+    public static void SetLineStyle(int line) {
         if (line < 1) { line = 1; }
         if (line > linestyles) { line = linestyles; }
         lineStyle = line;
     }
-    private static void setStrings() {
+    private static void SetStrings() {
         Dictionary<int, string> tempStyle;
         switch (styles) {
             case 1: { tempStyle = StyleOne; break; }
