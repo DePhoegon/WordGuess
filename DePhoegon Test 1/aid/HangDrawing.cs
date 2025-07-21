@@ -2,7 +2,7 @@
 using System.CodeDom;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-namespace DePhoegonHangMan.aid;
+namespace DePhoegon.aid;
 
 public class HangmanDrawing {
     private static int styles = 1;
@@ -72,25 +72,25 @@ public class HangmanDrawing {
         BodyParts.Clear();
         for (int i = 5; i <= 11; i++) { BodyParts[i - 5] = tempStyle[i]; } // Maps Body parts 0-6
     }
-    public static void DrawStand(int chances) {
-        foreach (var line in TopGallows) { Console.WriteLine(line); }
-        if (chances >= 1) { Console.WriteLine(BodyParts[0]); }
-        else { Console.WriteLine(BarePost); }
+    public static void DrawStand(int chances, int padding) {
+        if (padding < 0) { padding = 0; }
+        foreach (var line in TopGallows) { Helper.CenterPadWidthWithString(line, padding); }
+        if (chances >= 1) { Helper.CenterPadWidthWithString(BodyParts[0], padding); }
+        else { Helper.CenterPadWidthWithString(BarePost, padding); }
 
-        if (chances == 2) { Console.WriteLine(BodyParts[1]); }
-        else if (chances == 3) { Console.WriteLine(BodyParts[2]); }
-        else if (chances >= 4) { Console.WriteLine(BodyParts[3]); }
-        else { Console.WriteLine(BarePost); }
+        if (chances == 2) { Helper.CenterPadWidthWithString(BodyParts[1], padding); }
+        else if (chances == 3) { Helper.CenterPadWidthWithString(BodyParts[2], padding); }
+        else if (chances >= 4) { Helper.CenterPadWidthWithString(BodyParts[3], padding); }
+        else { Helper.CenterPadWidthWithString(BarePost, padding); }
 
-        if (chances == 5) { Console.WriteLine(BodyParts[4]); }
-        else { Console.WriteLine(BarePost); }
+        if (chances == 5) { Helper.CenterPadWidthWithString(BodyParts[4], padding); }
+        else { Helper.CenterPadWidthWithString(BarePost, padding); }
 
-        if (chances == 6) { Console.WriteLine(BodyParts[5]); }
-        else if (chances >= 7) { Console.WriteLine(BodyParts[6]); }
-        else { Console.WriteLine(BarePost); }
-
-        Console.WriteLine(BarePost);
-        Console.WriteLine(BaseGallows);
+        if (chances == 6) { Helper.CenterPadWidthWithString(BodyParts[5], padding); }
+        else if (chances >= 7) { Helper.CenterPadWidthWithString(BodyParts[6], padding); }
+        else { Helper.CenterPadWidthWithString(BarePost, padding); }
+        Helper.CenterPadWidthWithString(BarePost, padding);
+        Helper.CenterPadWidthWithString(BaseGallows, padding);
     }
 
     // Styles for the Hangman drawing
@@ -152,14 +152,14 @@ public class HangmanDrawing {
     };
 
     // Line breaks for visual separation
-    public static string getLineBreak() { 
-        switch (lineStyle) {
-            case 1: return lineBreak1;
-            case 2: return lineBreak2;
-            case 3: return lineBreak3;
-            case 4: return lineBreak4;
-            default: return lineBreak1;
-        }
+    public static string GetLineBreak() {
+        return lineStyle switch {
+            1 => lineBreak1,
+            2 => lineBreak2,
+            3 => lineBreak3,
+            4 => lineBreak4,
+            _ => lineBreak1,
+        };
     }
     private static readonly string lineBreak1 = "----------------------------------------";
     private static readonly string lineBreak2 = "========================================";

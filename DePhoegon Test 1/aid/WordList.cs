@@ -1,5 +1,5 @@
 ﻿using System;
-namespace DePhoegonHangMan.aid;
+namespace DePhoegon.aid;
 
 public class WordList {
 	public WordList()
