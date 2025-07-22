@@ -2,9 +2,6 @@
 namespace DePhoegon.aid;
 
 public class WordList {
-	public WordList()
-	{
-	}
     private static readonly string[] CodingWords = [
         "strings", "algorithm", "autonomous", "binary numbers", "arrays", "argument", "assignment operators", "java", "javascript", "powershell", "rust", "htmlx", "class", "static", "void", "object"
     ];

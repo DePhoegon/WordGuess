@@ -9,12 +9,9 @@ public class HangmanDrawing {
     private static readonly int StylesCount = 4;
     private static readonly int linestyles = 4;
     private static int lineStyle = 1;
-    public HangmanDrawing()
-	{
-	}
-    public static void PrimeOnes() {
-        styles = 1;
-        lineStyle = 1;
+    public static void PrimeStyleState() {
+        SetRandomLineStyle();
+        SetRandomStyle();
     }
     public static int GetStyleCount() { return StylesCount; }
     public static int GetStyleInt() { return styles; }
@@ -43,13 +40,11 @@ public class HangmanDrawing {
         styles = style; 
         SetStrings();
     }
-    public static void SetRandomStyle() {
+    private static void SetRandomStyle() {
         styles = Random.Shared.Next(1, StylesCount + 1);
         SetStrings();
     }
-    public static void SetRandomLineStyle() {
-        lineStyle = Random.Shared.Next(1, linestyles + 1);
-    }
+    private static void SetRandomLineStyle() { lineStyle = Random.Shared.Next(1, linestyles + 1); }
     public static void SetLineStyle(int line) {
         if (line < 1) { line = 1; }
         if (line > linestyles) { line = linestyles; }

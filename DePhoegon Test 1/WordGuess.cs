@@ -26,15 +26,15 @@ class WordGuess {
     private static void PlayGameEntry() {
         GameInit();
         GameLoop();
-        GameOver(gameWon);
     }
     private static void GameLoop() {
         while (gameNotOver) {
             if (hangCount >= Helper.hangChances) { gameNotOver = false; gameWon = false; break; }
             if (Array.IndexOf(guessedAnswer, '_') == -1) { gameNotOver = false; gameWon = true; break; }
+            Helper.SetCurrentSize();
             Helper.CenterPadHeight();
             DrawBoard(guessedChars, guessedAnswer, alphabet, hangCount);
-            Console.Write("Enter a letter to guess: ");
+            Helper.CenterPadWidthWithString("Please enter a letter to guess:", 0, false);
             char input = Console.ReadKey(true).KeyChar;
             input = char.ToLowerInvariant(input);
             Random rest = new();
@@ -53,15 +53,8 @@ class WordGuess {
             }
             int restMS = rest.Next(500, 1501);
             Thread.Sleep(restMS);
-            if (answer == guessedAnswer) {
-                gameNotOver = false;
-                Console.Clear();
-                DrawBoard(guessedChars, guessedAnswer, alphabet, hangCount);
-                Helper.CenterPadWidthWithString("You guessed the word!", 0);
-                Helper.CenterPadWidthWithString("Congratulations! You've guessed the word!", 0);
-                Helper.CenterPadWidthWithString($"The word was: {new string(answer)}", 0);
-            }
         }
+        GameOver(gameWon);
     }
     private static void GameOver(bool won) {
         Console.Clear();
@@ -83,8 +76,7 @@ class WordGuess {
             int sleepMs = sleepRand.Next(1500, 4001);
             Thread.Sleep(sleepMs);
             Environment.Exit(0); 
-        } else { GameInit(); GameLoop(); }
-
+        } else { GameInit(); GameLoop(); } 
     }
     private static bool LettersGuessed(char guessed) {
         bool found = false;
@@ -97,15 +89,16 @@ class WordGuess {
         if (!found && guessed != ' ') { hangCount++; }
         return found;
     }
-    private static void SetOrShiftStyles() {
-        style = HangmanDrawing.GetStyleInt(style);
-        lineStyle = HangmanDrawing.GetLineStyleInt(lineStyle);
+    private static void SetStyles() {
+        HangmanDrawing.PrimeStyleState();
+        style = HangmanDrawing.GetStyleInt();
+        lineStyle = HangmanDrawing.GetLineStyleInt();
     }
     static void GameInit() {
         SetWordList();
         style = 0; // Reset style to 0 to ensure it gets set correctly
         lineStyle = 0; // Reset line style to 0 to ensure it gets set correctly
-        SetOrShiftStyles();
+        SetStyles();
         Random random = new();
         string answerString = wList[random.Next(0, wList.Length)];
         answer = answerString.ToCharArray();
@@ -142,9 +135,9 @@ class WordGuess {
         string guessing = "|| ";
         for (int i = 0; i < guessed.Length; i++) {
             if (guessed[i] == ' ') { guessing += "   "; }
-            else { guessing = $"{guessed[i]} "; }
+            else { guessing += $"{guessed[i]} "; }
         }
-        guessing = "||";
+        guessing += "||";
         Helper.CenterPadWidthWithString(guessing, padding);
         Console.WriteLine();
     }
@@ -167,6 +160,7 @@ class WordGuess {
             }
             Helper.CenterPadWidthWithString(lettersString, padding);
             Console.WriteLine();
+            lettersString = ""; // Reset for the next row
         }
     }
     private static bool SetGuessedChars(char letter) {

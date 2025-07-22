@@ -1,48 +1,77 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <!-- AssemblyInfo.cs order -->
+    <InformationalVersion>2.5.0 - x86 Native</InformationalVersion>
+    <Product>$(AssemblyName)'s HangMan</Product>
+    <Company>DePhoegon Inc</Company>
+    <Configuration>Release</Configuration>
+    <Copyright>All Rights Reserved</Copyright>
+    <Description>DePhoegons word guessing game.</Description>
+    <FileVersion>2.5.0</FileVersion>
+    <Title>DePhoegon's ManHang</Title>
+    <AssemblyVersion>1.0</AssemblyVersion>
+    <NeutralLanguage>en</NeutralLanguage>
+	  <!-- -"TargetPlatform" -->
+	  <TargetFramework>net8.0-windows10.0.26100.0</TargetFramework>
+	  <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    
+    <!-- Remaining properties -->
     <OutputType>Exe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <RootNamespace>DePhoegon</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <StartupObject>DePhoegon.WordGuess</StartupObject>
     <AnalysisLevel>latest</AnalysisLevel>
-    <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>2.5.0</FileVersion>
-    <SourceControlInformationFeatureSupported>False</SourceControlInformationFeatureSupported>
+        <SourceControlInformationFeatureSupported>False</SourceControlInformationFeatureSupported>
     <MSBuildGitHashReplaceInfoVersion>False</MSBuildGitHashReplaceInfoVersion>
-    <InformationalVersion>2.5.0 - x86 Native</InformationalVersion>
     <EmbedUntrackedSources>false</EmbedUntrackedSources>
     <PackageTags>game;hangman;dephoegon</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Copyright>All Rights Reserved</Copyright>
-    <Product>$(AssemblyName)'s HangMan</Product>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-    <Company>DePhoegon Inc</Company>
     <Authors>DePhoegon</Authors>
-    <PlatformTarget>x86</PlatformTarget>
     <PublishTrimmed>False</PublishTrimmed>
     <PublishAot>True</PublishAot>
-    <Title>DePhoegon's ManHang</Title>
     <PackageIcon>hangman.png</PackageIcon>
     <IncludeSymbols>False</IncludeSymbols>
     <AssemblyName>$(MSBuildProjectName)s HangMan</AssemblyName>
     <ApplicationIcon>hangman.ico</ApplicationIcon>
-    <Description>DePhoegons word guessing game.</Description>
     <PackageId>DePhoegon's HangMan Word Guessing Game.</PackageId>
-    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <Platforms>AnyCPU;x86</Platforms>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/DePhoegon/WordGuess</PackageProjectUrl>
+    <SignAssembly>False</SignAssembly>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>full</DebugType>
     <IsPublishable>False</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DebugType>full</DebugType>
+    <IsPublishable>False</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebugType>none</DebugType>
-    <IsPublishable>False</IsPublishable>
+    <IsPublishable>True</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>none</DebugType>
+    <IsPublishable>True</IsPublishable>
+	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <DebugType>none</DebugType>
+    <IsPublishable>True</IsPublishable>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -62,5 +91,9 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
   </ItemGroup>
 </Project>
