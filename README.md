@@ -6,7 +6,7 @@ WordGuess is a standalone terminal-based word guessing game (similar to Hangman)
 
 **Note:** Running WordGuess in *Windows Terminal* (wt.exe) may cause visual issues such as display glitches.
 
-Manually resizing the terminal window will properly *center* ther playfield each 'draw;.
+Manually resizing the terminal window will properly *center* ther playfield each 'draw'.
 
 ## Features
 
