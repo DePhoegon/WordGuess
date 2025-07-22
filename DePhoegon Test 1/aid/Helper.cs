@@ -1,5 +1,4 @@
-﻿
-class Helper {
+﻿class Helper {
     public static readonly int intendedWidth = 50;
     public static readonly int intendedHeight = 30;
     public static readonly int hangChances = 6;
@@ -35,17 +34,37 @@ class Helper {
     public static void CenterPadWidthWithString(string str, int padding, bool newline) {
         if (padding < 0) { padding = 0; }
         int wPadding = 0;
-        if (currentWidth > intendedWidth) { wPadding = (currentWidth - intendedWidth) / 2; }
-        if (wPadding > 0) { Padder(wPadding, false); }
-        if (padding > 0) { Padder(padding, false); }
-        if (newline) { Console.WriteLine(str); }
-        else { Console.Write(str); }
+        int maxWidth = currentWidth > 0 ? currentWidth : intendedWidth;
+        int wrapWidth = maxWidth - padding;
+        if (wrapWidth < 10) wrapWidth = 10; // Prevent too-narrow wrapping
+
+        // Word-wrap the string to fit the window
+        List<string> wrappedLines = new();
+        string[] words = str.Split(' ');
+        string line = "";
+        foreach (var word in words) {
+            if ((line.Length + word.Length + 1) > wrapWidth) {
+                wrappedLines.Add(line.TrimEnd());
+                line = "";
+            }
+            line += word + " ";
+        }
+        if (line.Length > 0) wrappedLines.Add(line.TrimEnd());
+
+        foreach (var wrapped in wrappedLines) {
+            wPadding = 0;
+            if (maxWidth > intendedWidth) { wPadding = (maxWidth - intendedWidth) / 2; }
+            if (wPadding > 0) Padder(wPadding, false);
+            if (padding > 0) Padder(padding, false);
+
+            if (newline) Console.WriteLine(wrapped);
+            else Console.Write(wrapped);
+        }
     }
     public static void SetWindow() {
         if (OperatingSystem.IsWindows()) {
-            Console.SetWindowSize(width: intendedWidth, height: intendedHeight);
-            Console.BufferHeight = intendedHeight;
-            Console.BufferWidth = intendedWidth;
+            Console.SetWindowSize(intendedWidth, intendedHeight);
+            Console.SetBufferSize(intendedWidth, intendedHeight);
             Console.Title = "DePhoegon Word Guess";
         }
         if (OperatingSystem.IsMacOS() || OperatingSystem.IsLinux()) { 

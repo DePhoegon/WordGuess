@@ -1,11 +1,19 @@
 # WordGuess
 
-WordGuess is a standalone terminal-based word guessing game (similar to Hangman) for Windows. The game is designed for .NET 8 and runs as a native Windows executable that will launch a new terminal window or resize the current one for optimal play.
+WordGuess is a standalone terminal-based word guessing game (similar to Hangman) for Windows. The game is designed for .NET 8 and runs as a native Windows executable that will launch a new terminal/cmd window for play.
+
+## Warning
+
+**Note:** Running WordGuess in *Windows Terminal* (wt.exe) may cause visual issues such as display glitches.
+
+Manually resizing the terminal window will properly *center* ther playfield each 'draw;.
 
 ## Features
 
 - **No .NET installation required at runtime:** Just run the game using the provided command.
-- **Automatic terminal window management:** Launches or resizes the terminal for gameplay.
+- ~~**Automatic terminal window management:** Launches or resizes the terminal for gameplay.~~
+--- Manual resizing is required for proper centering in Windows Terminal. (See Warning above.)
+--- Initial cmd window resizing has been removed to avoid issues with Windows Terminal.
 - **Random word selection** from a variety of categories.
 - **Simple and fun gameplay** in the Windows terminal.
 
